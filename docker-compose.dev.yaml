@@ -16,17 +16,42 @@ services:
       - DB_HOST=db
     networks:
       - custom
+    depends_on:
+      - db
     ports:
       - 8000:8000
 
   db:
     container_name: rms-db
     image: postgres
+    restart: always
     environment:
       - POSTGRES_USER=rms
       - POSTGRES_PASSWORD=rms
+    volumes:
+      - postgres:/var/lib/postgresql/data
     networks:
       - custom
+
+  pgadmin:
+    container_name: rms-db-pgadmin
+    image: dpage/pgadmin4
+    environment:
+        PGADMIN_DEFAULT_EMAIL: admin@admin.com
+        PGADMIN_DEFAULT_PASSWORD: admin
+        PGADMIN_LISTEN_PORT: 80
+    ports:
+      - 15432:80
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - db
+    networks:
+      - custom
+
+volumes:
+  pgadmin:
+  postgres:
 
 networks:
   custom:
