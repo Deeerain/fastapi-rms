@@ -6,9 +6,25 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile.dev
-    command: python -m uvicorn app:app --host 0.0.0.0 --port 8000
+    command: python -m uvicorn app:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - ./backend/:/code/
+    environment:
+      - DB_NAME=rms
+      - DB_USER=rms
+      - DB_PASSWORD=rms
+      - DB_HOST=db
+    networks:
+      - custom
+    ports:
+      - 8000:8000
+
+  db:
+    container_name: rms-db
+    image: postgres
+    environment:
+      - POSTGRES_USER=rms
+      - POSTGRES_PASSWORD=rms
     networks:
       - custom
 
