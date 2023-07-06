@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  backend:
+    container_name: rms-application
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: python -m uvicorn app:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./backend/:/code/
+    networks:
+      - custom
+
+networks:
+  custom:
+    driver: bridge
